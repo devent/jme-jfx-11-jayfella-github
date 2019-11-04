@@ -1,0 +1,138 @@
+<!--
+
+    Dwarf Hustle :: Model - Defines the model of the game.
+    Copyright © 2019 Erwin Müller (erwin.mueller@anrisoftware.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.jayfella</groupId>
+	<artifactId>jme-jfx-11</artifactId>
+	<version>1.1.3.dwarfhustle-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>jme-jfx-11 :: Dwarf Hustle Fork</name>
+	<description>Needed changes to jme-jfx-11 for Dwarf Hustle Game.</description>
+	<inceptionYear>2019</inceptionYear>
+
+	<properties>
+		<project.custom.jme3.version>3.2.4-stable</project.custom.jme3.version>
+		<project.custom.javafx.version>11.0.2</project.custom.javafx.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <file.encoding>${project.build.sourceEncoding}</file.encoding>
+        <project.custom.source.source>11</project.custom.source.source>
+        <project.custom.source.target>11</project.custom.source.target>
+        <project.custom.requireMavenVersion>3.6.0</project.custom.requireMavenVersion>
+	</properties>
+
+	<developers>
+		<developer>
+			<id>EM</id>
+			<name>Erwin Müller</name>
+			<email>erwin@muellerpublic.de</email>
+			<organization>Advanced Natural Research Institute</organization>
+			<roles>
+				<role>Owner</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+	</developers>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>${project.custom.javafx.version}</version>
+			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${project.custom.javafx.version}</version>
+			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${project.custom.javafx.version}</version>
+			<classifier>win</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.jmonkeyengine</groupId>
+			<artifactId>jme3-core</artifactId>
+			<version>${project.custom.jme3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jmonkeyengine</groupId>
+			<artifactId>jme3-lwjgl3</artifactId>
+			<version>${project.custom.jme3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${project.custom.source.source}</source>
+					<target>${project.custom.source.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<escapeString>${project.custom.resources.escapestring}</escapeString>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- The Compiler Plugin is used to compile the sources of your project. -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+				<plugin>
+					<!-- The Resources Plugin handles the copying of project resources to 
+						the output directory. There are two different kinds of resources: main resources 
+						and test resources. The difference is that the main resources are the resources 
+						associated to the main source code while the test resources are associated 
+						to the test source code. Thus, this allows the separation of resources for 
+						the main source code and its unit tests. -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+	</build>
+</project>
