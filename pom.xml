@@ -121,11 +121,11 @@
 					<version>3.8.1</version>
 				</plugin>
 				<plugin>
-					<!-- The Resources Plugin handles the copying of project resources to 
-						the output directory. There are two different kinds of resources: main resources 
-						and test resources. The difference is that the main resources are the resources 
-						associated to the main source code while the test resources are associated 
-						to the test source code. Thus, this allows the separation of resources for 
+					<!-- The Resources Plugin handles the copying of project resources to
+						the output directory. There are two different kinds of resources: main resources
+						and test resources. The difference is that the main resources are the resources
+						associated to the main source code while the test resources are associated
+						to the test source code. Thus, this allows the separation of resources for
 						the main source code and its unit tests. -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
