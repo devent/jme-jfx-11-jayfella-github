@@ -1,22 +1,3 @@
-<!--
-
-    Dwarf Hustle :: Model - Defines the model of the game.
-    Copyright © 2019 Erwin Müller (erwin.mueller@anrisoftware.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -31,15 +12,15 @@
 	<description>Needed changes to jme-jfx-11 for Dwarf Hustle Game.</description>
 	<inceptionYear>2019</inceptionYear>
 
-	<properties>
-		<project.custom.jme3.version>3.2.4-stable</project.custom.jme3.version>
-		<project.custom.javafx.version>11.0.2</project.custom.javafx.version>
+    <properties>
+        <project.custom.jme3.version>3.3.2-stable</project.custom.jme3.version>
+        <project.custom.javafx.version>16</project.custom.javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <file.encoding>${project.build.sourceEncoding}</file.encoding>
         <project.custom.source.source>11</project.custom.source.source>
         <project.custom.source.target>11</project.custom.source.target>
         <project.custom.requireMavenVersion>3.6.0</project.custom.requireMavenVersion>
-	</properties>
+    </properties>
 
 	<developers>
 		<developer>

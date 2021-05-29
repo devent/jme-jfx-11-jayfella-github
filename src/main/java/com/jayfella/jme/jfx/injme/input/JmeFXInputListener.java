@@ -4,24 +4,33 @@
  */
 package com.jayfella.jme.jfx.injme.input;
 
-import com.jme3.app.Application;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.RawInputListener;
-import com.jme3.input.awt.AwtKeyInput;
-import com.jme3.input.event.*;
-import com.jayfella.jme.jfx.injme.JmeFxContainerInternal;
-import com.jayfella.jme.jfx.injme.JmeFxDnDHandler;
-import com.jayfella.jme.jfx.util.JfxPlatform;
-import com.sun.javafx.embed.AbstractEvents;
-import com.sun.javafx.embed.EmbeddedSceneInterface;
-import javafx.scene.Scene;
+import static java.util.Objects.requireNonNull;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.function.Function;
 
-import static java.util.Objects.requireNonNull;
+import com.jayfella.jme.jfx.injme.JmeFxContainerInternal;
+import com.jayfella.jme.jfx.injme.JmeFxDnDHandler;
+import com.jayfella.jme.jfx.util.JfxPlatform;
+import com.jme3.app.Application;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.RawInputListener;
+import com.jme3.input.awt.AwtKeyInput;
+import com.jme3.input.event.InputEvent;
+import com.jme3.input.event.JoyAxisEvent;
+import com.jme3.input.event.JoyButtonEvent;
+import com.jme3.input.event.KeyInputEvent;
+import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.input.event.MouseMotionEvent;
+import com.jme3.input.event.TouchEvent;
+import com.sun.javafx.embed.AbstractEvents;
+import com.sun.javafx.embed.EmbeddedSceneInterface;
+
+import javafx.scene.Scene;
 
 /**
  * Converts Jme Events to JavaFx Events
@@ -51,7 +60,16 @@ public class JmeFXInputListener implements RawInputListener {
     private final char[] keyCharSet;
 
     /**
-     * The mouse button states.
+     * The mouse button states. Currently only left, right and middle buttons are
+     * handled. Javafx 16 have the additional <code>backBtnDown</code> and
+     * <code>forwardBtnDown</code> that are ignored.
+     * <ol start="0">
+     * <li>{@link MouseInput#BUTTON_LEFT}
+     * <li>{@link MouseInput#BUTTON_RIGHT}
+     * <li>{@link MouseInput#BUTTON_MIDDLE}
+     * </ol>
+     *
+     * @see MouseButtonEvent#getButtonIndex()
      */
     private final boolean[] mouseButtonState;
 
@@ -61,11 +79,11 @@ public class JmeFXInputListener implements RawInputListener {
     private volatile RawInputListener rawInputListener;
 
     /**
-     *  Additional Evaluation function, which checks, if JFX is allowed to 
+     *  Additional Evaluation function, which checks, if JFX is allowed to
      *  set the InputEvent as consumed.
      */
     private Function<InputEvent,Boolean> allowedToConsumeInputEventFunction = event->true;
-    
+
     /**
      * The D&D handler.
      */
@@ -75,9 +93,9 @@ public class JmeFXInputListener implements RawInputListener {
         this.container = container;
         this.keyStateSet = new BitSet(0xFF);
         this.keyCharSet = new char[Character.MAX_CODE_POINT];
-        this.mouseButtonState = new boolean[3];
+        this.mouseButtonState = new boolean[5];
+        Arrays.fill(mouseButtonState, false);
         this.keyCharArray = new char[Character.MAX_CODE_POINT][];
-
         for (int i = 0, length = keyCharArray.length; i < length; i++) {
             keyCharArray[i] = new char[]{(char) i};
         }
@@ -150,7 +168,16 @@ public class JmeFXInputListener implements RawInputListener {
     }
 
     /**
-     * Gets the mouse button states.
+     * Gets the mouse button states. Currently only left, right and middle buttons
+     * are handled. Javafx 16 have the additional <code>backBtnDown</code> and
+     * <code>forwardBtnDown</code> that are ignored.
+     * <ol start="0">
+     * <li>{@link MouseInput#BUTTON_LEFT}
+     * <li>{@link MouseInput#BUTTON_RIGHT}
+     * <li>{@link MouseInput#BUTTON_MIDDLE}
+     * </ol>
+     *
+     * @see MouseButtonEvent#getButtonIndex()
      *
      * @return the mouse button states.
      */
@@ -314,6 +341,8 @@ public class JmeFXInputListener implements RawInputListener {
         final boolean primaryBtnDown = mouseButtonState[0];
         final boolean middleBtnDown = mouseButtonState[1];
         final boolean secondaryBtnDown = mouseButtonState[2];
+        final boolean backBtnDown = mouseButtonState[3];
+        final boolean forwardBtnDown = mouseButtonState[4];
 
         if (dndHandler != null) {
             dndHandler.mouseUpdate(x, y, primaryBtnDown);
@@ -343,7 +372,8 @@ public class JmeFXInputListener implements RawInputListener {
          */
 
         // java 11 implementation
-        sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, x, y, screenX, screenY,
+        sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, backBtnDown,
+                forwardBtnDown, x, y, screenX, screenY,
                 shift, ctrl, alt, meta, popupTrigger);
 
     }
@@ -423,6 +453,8 @@ public class JmeFXInputListener implements RawInputListener {
         final boolean primaryBtnDown = mouseButtonState[0];
         final boolean middleBtnDown = mouseButtonState[1];
         final boolean secondaryBtnDown = mouseButtonState[2];
+        final boolean backBtnDown = mouseButtonState[3];
+        final boolean forwardBtnDown = mouseButtonState[4];
 
         if (dndHandler != null) {
             dndHandler.mouseUpdate(x, y, primaryBtnDown);
@@ -450,7 +482,8 @@ public class JmeFXInputListener implements RawInputListener {
          */
 
         // Java 11 implementation
-        sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, x, y, screenX, screenY,
+        sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, backBtnDown,
+                forwardBtnDown, x, y, screenX, screenY,
                 shift, ctrl, alt, meta, false);
 
 
@@ -532,7 +565,7 @@ public class JmeFXInputListener implements RawInputListener {
 
     /**
      * set a function, which defines, if the input listener is allowed to consume certain input events
-     *  
+     *
      */
 	public void setAllowedToConsumeInputEventFunction(Function<InputEvent, Boolean> allowedToConsumeInputEventFunction) {
 		this.allowedToConsumeInputEventFunction = allowedToConsumeInputEventFunction;
