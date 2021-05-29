@@ -1,11 +1,19 @@
 package com.jayfella.jme.jfx.injme;
 
+import static javafx.scene.image.PixelFormat.getByteBgraInstance;
+
+import java.nio.ByteBuffer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jayfella.jme.jfx.injme.input.JmeFXInputListener;
 import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.sun.javafx.embed.EmbeddedSceneDSInterface;
 import com.sun.javafx.embed.EmbeddedSceneDTInterface;
 import com.sun.javafx.embed.EmbeddedSceneInterface;
 import com.sun.javafx.embed.HostDragStartListener;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -14,12 +22,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.TransferMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.ByteBuffer;
-
-import static javafx.scene.image.PixelFormat.getByteBgraInstance;
 
 /**
  * A very hacky implementation of a DND system, similar to SwingDND but for jme context. <br> Allows
@@ -34,7 +36,7 @@ public class JmeFxDnDHandler implements HostDragStartListener {
     /**
      * The JavaFX container.
      */
-    private JmeFxContainerInternal container;
+    private final JmeFxContainerInternal container;
 
     /**
      * The drop target.
@@ -140,7 +142,8 @@ public class JmeFxDnDHandler implements HostDragStartListener {
 
             //LOGGER.debug(dragSource, transferMode, (source, mode) -> "Drag started of " + source + " in mode " + mode);
 
-            final Clipboard clipboard = Clipboard.getSystemClipboard();
+            // final Clipboard clipboard = Clipboard.getSystemClipboard();
+            Clipboard.getSystemClipboard();
 
             //LOGGER.debug(this, clipboard, clip -> "Clipboard : " + clip);
 

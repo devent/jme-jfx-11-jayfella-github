@@ -2,7 +2,7 @@ package com.jayfella.jme.jfx.test;
 
 import com.jayfella.jme.jfx.JavaFxUI;
 import com.jme3.app.SimpleApplication;
-import javafx.event.EventType;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 

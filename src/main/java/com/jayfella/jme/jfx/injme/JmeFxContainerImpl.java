@@ -1,11 +1,14 @@
 package com.jayfella.jme.jfx.injme;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.app.state.AppState;
-import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
-import com.jme3.input.InputManager;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jayfella.jme.jfx.injme.cursor.CursorDisplayProvider;
 import com.jayfella.jme.jfx.injme.cursor.proton.ProtonCursorProvider;
 import com.jayfella.jme.jfx.injme.input.JmeFXInputListener;
@@ -13,6 +16,12 @@ import com.jayfella.jme.jfx.injme.util.JmeWindowUtils;
 import com.jayfella.jme.jfx.lock.AsyncReadSyncWriteLock;
 import com.jayfella.jme.jfx.lock.FinalAtomicReadWriteLock;
 import com.jayfella.jme.jfx.util.JfxPlatform;
+import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.input.InputManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.system.JmeContext;
@@ -29,24 +38,16 @@ import com.sun.javafx.embed.EmbeddedSceneInterface;
 import com.sun.javafx.embed.EmbeddedStageInterface;
 import com.sun.javafx.embed.HostInterface;
 import com.sun.javafx.stage.EmbeddedWindow;
+
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 /**
  * The container which interacts with jME and includes javaFX scene.
  *
  * @author abies / Artur Biesiadowski / JavaSaBr
  */
-@SuppressWarnings("WeakerAccess")
 public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInternal {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JfxPlatform.class);

@@ -1,12 +1,16 @@
 package com.jayfella.jme.jfx.injfx;
 
-import com.jme3.input.JoyInput;
-import com.jme3.input.TouchInput;
 import com.jayfella.jme.jfx.injfx.input.JfxKeyInput;
 import com.jayfella.jme.jfx.injfx.input.JfxMouseInput;
+import com.jme3.input.JoyInput;
+import com.jme3.input.TouchInput;
 import com.jme3.opencl.Context;
 import com.jme3.renderer.Renderer;
-import com.jme3.system.*;
+import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
+import com.jme3.system.JmeSystem;
+import com.jme3.system.SystemListener;
+import com.jme3.system.Timer;
 
 /**
  * The implementation of the {@link JmeContext} for integrating to JavaFX.
@@ -97,7 +101,7 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
      */
     protected AppSettings createSettings() {
         var settings = new AppSettings(true);
-        settings.setRenderer(AppSettings.LWJGL_OPENGL3);
+        settings.setRenderer(AppSettings.LWJGL_OPENGL32);
         return settings;
     }
 
@@ -127,7 +131,7 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
     @Override
     public void setSettings(AppSettings settings) {
         this.settings.copyFrom(settings);
-        this.settings.setRenderer(AppSettings.LWJGL_OPENGL3);
+        this.settings.setRenderer(AppSettings.LWJGL_OPENGL32);
 
         getBackgroundContext().setSettings(settings);
     }
@@ -198,7 +202,7 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
 
     @Override
     public void create(boolean waitFor) {
-        var render = System.getProperty("jfx.background.render", AppSettings.LWJGL_OPENGL3);
+        var render = System.getProperty("jfx.background.render", AppSettings.LWJGL_OPENGL32);
         var backgroundContext = getBackgroundContext();
         backgroundContext.getSettings().setRenderer(render);
         backgroundContext.create(waitFor);

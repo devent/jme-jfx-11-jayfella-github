@@ -1,5 +1,11 @@
 package com.jayfella.jme.jfx;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jayfella.jme.jfx.impl.JmeUpdateLoop;
 import com.jayfella.jme.jfx.impl.SceneNotifier;
 import com.jayfella.jme.jfx.injme.JmeFxContainer;
@@ -10,6 +16,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
@@ -18,11 +25,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JavaFxUI {
 
@@ -30,16 +32,16 @@ public class JavaFxUI {
 
     private static JavaFxUI INSTANCE;
 
-    private Application app;
-    private JmeFxContainerImpl container;
+    private final Application app;
+    private final JmeFxContainerImpl container;
 
     // the general overlay
-    private Group group;
-    private Scene scene;
-    private AnchorPane uiscene;
+    private final Group group;
+    private final Scene scene;
+    private final AnchorPane uiscene;
 
     // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
-    private AnchorPane dialogAnchorPanel;
+    private final AnchorPane dialogAnchorPanel;
     private javafx.scene.Node dialog;
     private ChangeListener<Bounds> dialogBoundsListener;
 
@@ -53,7 +55,7 @@ public class JavaFxUI {
 
         Node guiNode = ((SimpleApplication)application).getGuiNode();
         container = (JmeFxContainerImpl) JmeFxContainer.install(application, guiNode);
-        
+
         group = new Group();
         uiscene = new AnchorPane();
         uiscene.setMinWidth(app.getCamera().getWidth());
@@ -199,6 +201,7 @@ public class JavaFxUI {
         });
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     private void recursivelyNotifyChildrenRemoved(javafx.scene.Node node) {
 
         // we can do these things in a single execution, rather than individual calls.
@@ -213,6 +216,7 @@ public class JavaFxUI {
                 }
 
                 if (jmeUpdateLoop) {
+                    // Node should be of type JmeUpdateLoop
                     updatingItems.remove(node);
                 }
             });
@@ -292,7 +296,7 @@ public class JavaFxUI {
             }
 
             uiscene.getChildren().add(dialogAnchorPanel);
-            
+
             node.boundsInParentProperty().addListener(dialogBoundsListener);
 
         });
@@ -307,8 +311,11 @@ public class JavaFxUI {
             uiscene.getChildren().remove(dialogAnchorPanel);
         });
 
-        updatingItems.remove(dialog);
-        
+        // check that dialog is implementing JmeUpdateLoop, otherwise it will be hard to
+        // debug why the item was not removed from the list.
+        var updateLoop = (JmeUpdateLoop) dialog;
+        updatingItems.remove(updateLoop);
+
         dialog.boundsInParentProperty().removeListener(dialogBoundsListener);
         dialog = null;
         dialogBoundsListener = null;
