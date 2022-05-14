@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +12,22 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
-        <project.custom.jme3.version>3.3.2-stable</project.custom.jme3.version>
+        <!-- javadoc -->
+        <project.custom.home>https://project.anrisoftware.com/projects/com-jayfella-jme-jfx-11</project.custom.home>
+        <project.custom.license.image.url>https://project.anrisoftware.com/attachments/download/475/BSD_license_small.png</project.custom.license.image.url>
+        <project.custom.central.url>https://search.maven.org/artifact/${project.groupId}/${project.artifactId}/${project.version}/pom</project.custom.central.url>
+        <project.custom.scm.repo>https://gitea.anrisoftware.com/com.anrisoftware.globalpom/globalpom-installation.git</project.custom.scm.repo>
+        <project.custom.scm.github>https://github.com/devent/globalpom-installation</project.custom.scm.github>
+        <project.custom.scm.pub>scm:git:https://gitea.anrisoftware.com/com.anrisoftware.globalpom/globalpom-installation.git</project.custom.scm.pub>
+        <project.custom.scm.dev>scm:git:git@anrisoftware.com:anrisoftware.com/globalpom-installation.git</project.custom.scm.dev>
+        <project.custom.scm.url>${project.custom.home}/repository</project.custom.scm.url>
+        <project.custom.jenkins.url>https://jenkins.anrisoftware.com/job/globalpom-installation-public</project.custom.jenkins.url>
+        <project.custom.jenkins.build.badge.master>${project.custom.jenkins.url}/job/master/badge/icon</project.custom.jenkins.build.badge.master>
+        <project.custom.jenkins.build.link.master>${project.custom.jenkins.url}/job/master</project.custom.jenkins.build.link.master>
+        <project.custom.sonarqube.url>https://sonar.anrisoftware.com/dashboard?id=com.anrisoftware.globalpom%3Aglobalpomutils</project.custom.sonarqube.url>
+        <project.custom.sonarqube.qualitygate.badge>https://sonar.anrisoftware.com/api/badges/gate?key=com.anrisoftware.globalpom%3Aglobalpomutils</project.custom.sonarqube.qualitygate.badge>
+        <project.custom.sonarqube.qualitygate.link>${project.custom.sonarqube.url}</project.custom.sonarqube.qualitygate.link>
+        <!-- versions -->
         <project.custom.jme3.version>3.5.2-stable</project.custom.jme3.version>
         <project.custom.javafx.version>16</project.custom.javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,6 +50,21 @@
             <timezone>Europe/Berlin</timezone>
         </developer>
     </developers>
+
+    <distributionManagement>
+        <site>
+            <id>site-distribution-id</id>
+            <url>${site.distribution.url}</url>
+        </site>
+        <repository>
+            <id>public_releases</id>
+            <url>https://maven.anrisoftware.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>public_snapshots</id>
+            <url>https://maven.anrisoftware.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -101,6 +130,34 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- The Compiler Plugin is used to compile the sources of your project. -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+                <plugin>
+                    <!-- The Resources Plugin handles the copying of project resources to the output directory. There are
+                        two different kinds of resources: main resources and test resources. The difference is that the main resources are the resources
+                        associated to the main source code while the test resources are associated to the test source code. Thus, this allows the
+                        separation of resources for the main source code and its unit tests. -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.13</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,30 +176,79 @@
                     <escapeString>${project.custom.resources.escapestring}</escapeString>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <keyname>ANRI Software</keyname>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keyname>ANRI Software</keyname>
+                </configuration>
+            </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <!-- The Compiler Plugin is used to compile the sources
-                        of your project. -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                </plugin>
-                <plugin>
-                    <!-- The Resources Plugin handles the copying of project
-                        resources to the output directory. There are two different kinds of resources:
-                        main resources and test resources. The difference is that the main resources
-                        are the resources associated to the main source code while the test resources
-                        are associated to the test source code. Thus, this allows the separation
-                        of resources for the main source code and its unit tests. -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
     </build>
+
+    <profiles>
+        <profile>
+            <id>private-repository</id>
+            <distributionManagement>
+                <repository>
+                    <id>private_repo_releases</id>
+                    <url>https://maven.anrisoftware.com/repository/internal/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>private_repo_snapshots</id>
+                    <url>https://maven.anrisoftware.com/repository/snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <!-- Activate profile with -Psign-artifact -->
+            <id>sign-artifact</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Skip signing -Pno-sign -->
+            <id>no-sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

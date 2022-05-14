@@ -102,23 +102,6 @@ pipeline {
             }
         } // stage
 
-        /**
-        * The stage will deploy the artifacts and the generated site to the public repository from the main branch.
-        */
-        stage("Publish to Public") {
-            when {
-                allOf {
-                    expression { !isSnapshot }
-                    branch "main"
-                }
-            }
-            steps {
-                container("maven") {
-                    sh "/setup-gpg.sh; mvn -s /m2/settings.xml -Posssonatype -B deploy"
-                }
-            }
-        } // stage
-
     } // stages
 
     post {
