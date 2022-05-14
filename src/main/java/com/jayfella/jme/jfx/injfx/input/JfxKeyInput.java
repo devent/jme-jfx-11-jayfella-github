@@ -1,17 +1,18 @@
 package com.jayfella.jme.jfx.injfx.input;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+import com.jayfella.jme.jfx.injfx.JmeOffscreenSurfaceContext;
 import com.jme3.input.KeyInput;
 import com.jme3.input.event.KeyInputEvent;
-import com.jayfella.jme.jfx.injfx.JmeOffscreenSurfaceContext;
+
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * The implementation of the {@link KeyInput} for using in the {@link ImageView}.
@@ -194,4 +195,10 @@ public class JfxKeyInput extends JfxInput implements KeyInput {
         var code = KEY_CODE_TO_JME.get(keyCode);
         return code == null ? KEY_UNKNOWN : code;
     }
+
+    @Override
+    public String getKeyName(int key) {
+        throw new UnsupportedOperationException("getKeyName not implemented for JfxKeyInput");
+    }
+
 }

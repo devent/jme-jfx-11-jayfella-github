@@ -14,6 +14,7 @@
 
     <properties>
         <project.custom.jme3.version>3.3.2-stable</project.custom.jme3.version>
+        <project.custom.jme3.version>3.5.2-stable</project.custom.jme3.version>
         <project.custom.javafx.version>16</project.custom.javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <file.encoding>${project.build.sourceEncoding}</file.encoding>
