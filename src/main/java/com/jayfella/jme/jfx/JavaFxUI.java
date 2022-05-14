@@ -101,6 +101,10 @@ public class JavaFxUI {
         INSTANCE = new JavaFxUI(application, cssStyles);
     }
 
+    public Scene getScene() {
+        return scene;
+    }
+
     public static JavaFxUI getInstance() {
         return INSTANCE;
     }
