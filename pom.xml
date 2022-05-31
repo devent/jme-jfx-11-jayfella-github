@@ -1,14 +1,48 @@
+<!--
+
+    Copyright © 2019-2022, jMonkeyEngine
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+        * Redistributions of source code must retain the above copyright
+          notice, this list of conditions and the following disclaimer.
+        * Redistributions in binary form must reproduce the above copyright
+          notice, this list of conditions and the following disclaimer in the
+          documentation and/or other materials provided with the distribution.
+        * Neither the name of the <organization> nor the
+          names of its contributors may be used to endorse or promote products
+          derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.anrisoftware.globalpom</groupId>
+        <artifactId>globalpom-groovy-gmavenplus</artifactId>
+        <version>4.6.1</version>
+    </parent>
+
     <groupId>com.jayfella</groupId>
-    <artifactId>jme-jfx-11</artifactId>
-    <version>1.1.5-1.0.0</version>
+    <artifactId>jme-jfx</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>jme-jfx-11 :: Dwarf Hustle Fork</name>
-    <description>Needed changes to jme-jfx-11 for Dwarf Hustle Game.</description>
+    <name>jme-jfx :: JME3 JavaFX Bridge</name>
+    <description>Updated to JavaFX 16 and jMonkeyEngine 3.5.2. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
     <inceptionYear>2019</inceptionYear>
 
     <properties>
@@ -27,6 +61,10 @@
         <project.custom.sonarqube.url>https://sonar.anrisoftware.com/dashboard?id=com.anrisoftware.globalpom%3Aglobalpomutils</project.custom.sonarqube.url>
         <project.custom.sonarqube.qualitygate.badge>https://sonar.anrisoftware.com/api/badges/gate?key=com.anrisoftware.globalpom%3Aglobalpomutils</project.custom.sonarqube.qualitygate.badge>
         <project.custom.sonarqube.qualitygate.link>${project.custom.sonarqube.url}</project.custom.sonarqube.qualitygate.link>
+        <license.custom.license.owner>jMonkeyEngine</license.custom.license.owner>
+        <license.custom.license.template>com/mycila/maven/plugin/license/templates/BSD-3.txt</license.custom.license.template>
+        <license.custom.license.email>erwin@muellerpublic.de</license.custom.license.email>
+        <project.custom.current.year>2022</project.custom.current.year>
         <!-- versions -->
         <project.custom.jme3.version>3.5.2-stable</project.custom.jme3.version>
         <project.custom.javafx.version>16</project.custom.javafx.version>
@@ -36,6 +74,15 @@
         <project.custom.source.target>11</project.custom.source.target>
         <project.custom.requireMavenVersion>3.6.0</project.custom.requireMavenVersion>
     </properties>
+
+    <licenses>
+        <license>
+            <name>BSD-3-Clause</name>
+            <url>https://opensource.org/licenses/BSD-3-Clause</url>
+            <distribution>repo</distribution>
+            <comments>BSD 3-Clause "New" or "Revised" License</comments>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
@@ -70,24 +117,20 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
-            <version>4.0.16-alpha</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
 
@@ -130,154 +173,33 @@
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>2.8</version>
-            </extension>
-            <!-- Enabling the use of SSH -->
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>3.1.0</version>
-            </extension>
-        </extensions>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <!-- The Compiler Plugin is used to compile the sources of your project. -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                </plugin>
-                <plugin>
-                    <!-- The Resources Plugin handles the copying of project resources to the output directory. There are
-                        two different kinds of resources: main resources and test resources. The difference is that the main resources are the resources
-                        associated to the main source code while the test resources are associated to the test source code. Thus, this allows the
-                        separation of resources for the main source code and its unit tests. -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.13</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
                 <configuration>
-                    <source>${project.custom.source.source}</source>
-                    <target>${project.custom.source.target}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <header>${license.custom.license.template}</header>
+                    <properties>
+                        <owner>${license.custom.license.owner}</owner>
+                        <email>${license.custom.license.email}</email>
+                        <year>${project.custom.year}</year>
+                    </properties>
+                    <excludes>
+                        <exclude>**/license.txt</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                    </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <escapeString>${project.custom.resources.escapestring}</escapeString>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-gpg-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
                         <goals>
-                            <goal>sign</goal>
+                            <goal>check</goal>
                         </goals>
-                        <configuration>
-                            <keyname>ANRI Software</keyname>
-                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <keyname>ANRI Software</keyname>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <!-- The Maven Project Info Reports Plugin is a plugin that
-                    generates standard reports for the specified project. -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.2</version>
-            </plugin>
-            <plugin>
-                <!-- The Surefire Report Plugin parses the generated TEST-*.xml
-                    files under ${basedir}/target/surefire-reports and renders them to DOXIA
-                    which creates the web interface version of the test results. -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
-            <plugin>
-                <!-- The Apache Maven Javadoc Plugin is a plugin that uses
-                    the javadoc tool for generating javadocs for the specified project. -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
-            </plugin>
-            <plugin>
-                <!-- The JXR Plugin produces a cross-reference of the projectʼs
-                    sources. The generated reports make it easier for the user to reference or
-                    find specific lines of code. It is also handy when used with the PMD Plugin
-                    for referencing errors found in the code. -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-            <plugin>
-                <!-- A Maven plugin for the PMD toolkit, that produces a
-                    report on both code rule violations and detected copy and paste fragments,
-                    as well as being able to fail the build based on these metrics. -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.16.0</version>
-                <configuration>
-                    <linkXref>true</linkXref>
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${project.custom.source.target}</targetJdk>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- The JaCoCo Maven plug-in provides the JaCoCo runtime
-                    agent to your tests and allows basic report creation. -->
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <!-- select non-aggregate reports -->
-                            <report>report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <profiles>
         <profile>
