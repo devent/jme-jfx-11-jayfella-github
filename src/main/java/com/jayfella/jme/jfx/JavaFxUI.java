@@ -49,8 +49,11 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import java.util.Vector;
 
 public class JavaFxUI {
 
@@ -65,6 +68,8 @@ public class JavaFxUI {
     private final Group group;
     private final Scene scene;
     private final AnchorPane uiscene;
+
+    Runnable removeExistingPopup = () -> {};
 
     // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
     private final AnchorPane dialogAnchorPanel;
@@ -178,6 +183,40 @@ public class JavaFxUI {
             uiscene.getChildren().add(node);
             recursivelyNotifyChildrenAdded(node);
         });
+    }
+
+    /**
+     * Attaches a popup onto the scene in a JME friendly way.
+     * Only one popup can be onscreen at once, adding annother will remove the old one.
+     * Clicking away from the popup will close it.
+     * @param node The content to be displayed
+     * @param x X coordinate of the top left of the popup
+     * @param y Y coordinate of the top left of the popup
+     * @return A Runnable that if called will remove the popup
+     */
+    public Runnable attachPopup(javafx.scene.Node node, double x, double y){
+        removeExistingPopup.run();
+
+        AnchorPane popupOverlay = new AnchorPane();
+        popupOverlay.setMinWidth(app.getCamera().getWidth());
+        popupOverlay.setMinHeight(app.getCamera().getHeight());
+        popupOverlay.getChildren().add(node);
+
+        node.setTranslateX(x);
+        node.setTranslateY(y);
+
+        group.getChildren().add(popupOverlay);
+
+        removeExistingPopup = () -> {
+            group.getChildren().remove(popupOverlay);
+            removeExistingPopup = () -> {};
+        };
+
+        popupOverlay.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            removeExistingPopup.run();
+        });
+
+        return removeExistingPopup;
     }
 
     /**
