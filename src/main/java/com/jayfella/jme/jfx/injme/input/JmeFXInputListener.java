@@ -498,16 +498,6 @@ public class JmeFXInputListener implements RawInputListener {
         final boolean alt = keyStateSet.get(KeyEvent.VK_ALT);
         final boolean meta = keyStateSet.get(KeyEvent.VK_META);
 
-        /* Java 12 implementation
-        sceneInterface.mouseEvent(type, button,
-                primaryBtnDown, middleBtnDown, secondaryBtnDown,
-                shift, ctrl,
-                x, y, screenX, screenY,
-                shift, ctrl, alt,
-                meta, false);
-         */
-
-        // Java 11 implementation
         sceneInterface.mouseEvent(type, button, primaryBtnDown, middleBtnDown, secondaryBtnDown, backBtnDown,
                 forwardBtnDown, x, y, screenX, screenY,
                 shift, ctrl, alt, meta, false);
