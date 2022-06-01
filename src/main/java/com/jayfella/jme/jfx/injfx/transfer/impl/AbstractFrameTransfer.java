@@ -26,21 +26,22 @@
  */
 package com.jayfella.jme.jfx.injfx.transfer.impl;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.jayfella.jme.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode;
 import com.jayfella.jme.jfx.injfx.transfer.FrameTransfer;
 import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.FrameBuffer.FrameBufferTarget;
 import com.jme3.texture.Image;
 import com.jme3.util.BufferUtils;
+
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.jayfella.jme.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode;
 
 /**
  * The base implementation of a frame transfer.
@@ -137,8 +138,8 @@ public abstract class AbstractFrameTransfer<T> implements FrameTransfer {
             this.frameBuffer = frameBuffer;
         } else {
             this.frameBuffer = new FrameBuffer(width, height, 1);
-            this.frameBuffer.setDepthBuffer(Image.Format.Depth);
-            this.frameBuffer.setColorBuffer(Image.Format.RGBA8);
+            this.frameBuffer.setDepthTarget(FrameBufferTarget.newTarget(Image.Format.Depth));
+            this.frameBuffer.addColorTarget(FrameBufferTarget.newTarget(Image.Format.RGBA8));
             this.frameBuffer.setSrgb(true);
         }
 

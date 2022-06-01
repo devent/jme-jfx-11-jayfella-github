@@ -223,7 +223,6 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
 
     @Override
     public void setAutoFlushFrames(boolean enabled) {
-        // TODO Auto-generated method stub
     }
 
     @Override
