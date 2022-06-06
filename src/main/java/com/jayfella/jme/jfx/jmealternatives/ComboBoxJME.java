@@ -24,47 +24,59 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jayfella.jme.jfx.injfx.transfer.impl;
+package com.jayfella.jme.jfx.jmealternatives;
 
-import com.jayfella.jme.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode;
-import com.jayfella.jme.jfx.util.JfxPlatform;
-import com.jme3.texture.FrameBuffer;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import com.jayfella.jme.jfx.JavaFxUI;
+import javafx.geometry.Bounds;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 
 /**
- * The class for transferring a frame from jME to {@link ImageView}.
+ * This is a JME alternative for the ComboBox.
  *
- * @author JavaSaBr
+ * It behaves broadly the same way as the core ComboBox, but is not feature complete.
+ *
+ * In particular:
+ * It doesn't fully support keyboard selection (a mouse click is needed to close it)
+ * It doesn't support sizing based on number of entries, only by pixels
+ * It can go "offscreen" when it tries to open near the bottom of the screen
+ *
+ * @param <T>
  */
-public class ImageFrameTransfer extends AbstractFrameTransfer<ImageView> {
+public class ComboBoxJME<T> extends ComboBox<T> {
 
-    private WritableImage writableImage;
+    Runnable removeListPopup;
 
-    public ImageFrameTransfer(ImageView imageView, TransferMode transferMode, int width, int height) {
-        this(imageView, transferMode, null, width, height);
-    }
+    int maxHeight = 200;
 
-    public ImageFrameTransfer(
-            ImageView imageView,
-            TransferMode transferMode,
-            FrameBuffer frameBuffer,
-            int width,
-            int height
-    ) {
-        super(imageView, transferMode, frameBuffer, width, height);
-        JfxPlatform.runInFxThread(() -> imageView.setImage(writableImage));
+    @Override
+    public void show() {
+        Bounds boundsInScene = localToScene(getBoundsInLocal());
+
+        ListView<T> items = new ListView<>();
+        items.setItems(this.getItems());
+        items.setMinWidth(boundsInScene.getWidth());
+        items.setMaxHeight(maxHeight);
+
+        removeListPopup = JavaFxUI.getInstance().attachPopup(items, boundsInScene.getMinX(), boundsInScene.getMaxY());
+
+        items.setOnMousePressed(event -> {
+            getSelectionModel().select(items.getSelectionModel().getSelectedItem());
+            removeListPopup.run();
+        });
     }
 
     @Override
-    protected PixelWriter getPixelWriter(
-            ImageView destination,
-            FrameBuffer frameBuffer,
-            int width,
-            int height
-    ) {
-        writableImage = new WritableImage(width, height);
-        return writableImage.getPixelWriter();
+    public void hide() {
+        //do nothing, we're handling our own open/close (although keyboard based selection might need this?)
     }
+
+    /**
+     * Sets the height of the combobox when it opens (in pixels)
+     * @param height
+     */
+    public void setListHeight(int height){
+        this.maxHeight = height;
+    }
+
 }

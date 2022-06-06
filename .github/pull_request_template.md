@@ -14,4 +14,4 @@ Edit the title with "`[PR] Feature #NUMBER`"
 Update the branch name in `BRANCH` to show build status.
 URL encoded `#` is `%23`
 --->
-[![Build](https://jenkins.anrisoftware.com/job/com.jayfella-jme-jfx-11/job/BRANCH/badge/icon)](https://jenkins.anrisoftware.com/job/com.jayfella-jme-jfx-11/job/BRANCH/)
+[![Build](https://jenkins.anrisoftware.com/job/com.anrisoftware.jmejfx-jme-jfx/job/BRANCH/badge/icon)](https://jenkins.anrisoftware.com/job/com.anrisoftware.jmejfx-jme-jfx/job/BRANCH/)

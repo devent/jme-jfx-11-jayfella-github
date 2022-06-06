@@ -24,44 +24,64 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jayfella.jme.jfx.test;
+package com.jayfella.jme.jfx;
 
-import com.jayfella.jme.jfx.JavaFxUI;
+import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.system.AppSettings;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 /**
- * Tests horizontal and vertical scrolling using the mouse.
+ * Test modal dialog.
+ *
+ * @author Erwin Müller, {@code <erwin@muellerpublic.de>}
  */
-public class TestScroll extends SimpleApplication {
+public class ModalDialogTest extends SimpleApplication implements ActionListener {
+
+    private Dialog<ButtonType> dialog;
 
     public static void main(String... args) {
-        TestScroll main = new TestScroll();
-        main.start();
+        var dialogTest = new ModalDialogTest();
+        var settings = new AppSettings(true);
+        settings.setFrameRate(120);
+        dialogTest.setSettings(settings);
+        dialogTest.start();
     }
 
     @Override
     public void simpleInitApp() {
-
-
-
         JavaFxUI.initialize(this);
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefHeight(600);
-        scrollPane.setPrefWidth(400);
+        JfxPlatform.runInFxThread(() -> {
+            ButtonType loginButtonType = new ButtonType("Ok", ButtonData.OK_DONE);
+            dialog = new Dialog<>();
+            dialog.getDialogPane().getButtonTypes().add(loginButtonType);
+            boolean disabled = false;
+            dialog.getDialogPane().lookupButton(loginButtonType).setDisable(disabled);
+        });
 
-        Button button = new Button("My Button");
-        button.setPrefSize(400, 1300);
-
-        button.setOnScroll(System.err::println);
-        // button.addEventHandler(EventType.ROOT, System.err::println);
-
-        scrollPane.setContent(button);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        JavaFxUI.getInstance().attachChild(scrollPane);
+        VBox vBox = new VBox();
+        TextField textField = new TextField("");
+        vBox.getChildren().add(textField);
+        Button button_1 = new Button("Dialog");
+        button_1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                dialog.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+                });
+            }
+        });
+        vBox.getChildren().add(button_1);
+        JavaFxUI.getInstance().attachChild(vBox);
     }
 
     @Override
@@ -69,4 +89,8 @@ public class TestScroll extends SimpleApplication {
         inputManager.setCursorVisible(true);
     }
 
+    @Override
+    public void onAction(String name, boolean isPressed, float tpf) {
+        System.out.println("Pressed: " + isPressed);
+    }
 }

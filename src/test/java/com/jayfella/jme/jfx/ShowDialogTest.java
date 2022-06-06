@@ -24,47 +24,60 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jayfella.jme.jfx.injfx.transfer.impl;
+package com.jayfella.jme.jfx;
 
-import com.jayfella.jme.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode;
-import com.jayfella.jme.jfx.util.JfxPlatform;
-import com.jme3.texture.FrameBuffer;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import com.jme3.app.SimpleApplication;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.system.AppSettings;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
- * The class for transferring a frame from jME to {@link ImageView}.
+ * Test show dialog.
  *
- * @author JavaSaBr
+ * @author Erwin Müller, {@code <erwin@muellerpublic.de>}
  */
-public class ImageFrameTransfer extends AbstractFrameTransfer<ImageView> {
+public class ShowDialogTest extends SimpleApplication implements ActionListener {
 
-    private WritableImage writableImage;
-
-    public ImageFrameTransfer(ImageView imageView, TransferMode transferMode, int width, int height) {
-        this(imageView, transferMode, null, width, height);
-    }
-
-    public ImageFrameTransfer(
-            ImageView imageView,
-            TransferMode transferMode,
-            FrameBuffer frameBuffer,
-            int width,
-            int height
-    ) {
-        super(imageView, transferMode, frameBuffer, width, height);
-        JfxPlatform.runInFxThread(() -> imageView.setImage(writableImage));
+    public static void main(String... args) {
+        var dialogTest = new ShowDialogTest();
+        var settings = new AppSettings(true);
+        settings.setFrameRate(120);
+        dialogTest.setSettings(settings);
+        dialogTest.start();
     }
 
     @Override
-    protected PixelWriter getPixelWriter(
-            ImageView destination,
-            FrameBuffer frameBuffer,
-            int width,
-            int height
-    ) {
-        writableImage = new WritableImage(width, height);
-        return writableImage.getPixelWriter();
+    public void simpleInitApp() {
+        JavaFxUI.initialize(this);
+
+        var dialog = new VBox();
+        var okbutton = new Button("Ok");
+        dialog.getChildren().add(okbutton);
+        okbutton.setOnAction((event) -> {
+            JavaFxUI.getInstance().removeDialog();
+        });
+
+        VBox vBox = new VBox();
+        TextField textField = new TextField("");
+        vBox.getChildren().add(textField);
+        Button button_1 = new Button("Dialog");
+        button_1.setOnAction((event) -> {
+            JavaFxUI.getInstance().showDialog(dialog);
+        });
+        vBox.getChildren().add(button_1);
+        JavaFxUI.getInstance().attachChild(vBox);
+    }
+
+    @Override
+    public void simpleUpdate(float tpf) {
+        inputManager.setCursorVisible(true);
+    }
+
+    @Override
+    public void onAction(String name, boolean isPressed, float tpf) {
+        System.out.println("Pressed: " + isPressed);
     }
 }
