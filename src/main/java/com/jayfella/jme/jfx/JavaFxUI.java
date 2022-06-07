@@ -26,11 +26,9 @@
  */
 package com.jayfella.jme.jfx;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.jayfella.jme.jfx.impl.JmeUpdateLoop;
 import com.jayfella.jme.jfx.impl.SceneNotifier;
@@ -52,10 +50,10 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JavaFxUI {
-
-    private static final Logger log = LoggerFactory.getLogger(JavaFxUI.class);
 
     private static JavaFxUI INSTANCE;
 
@@ -67,22 +65,26 @@ public class JavaFxUI {
     private final Scene scene;
     private final AnchorPane uiscene;
 
-    Runnable removeExistingPopup = () -> {};
+    Runnable removeExistingPopup = () -> {
+    };
 
-    // dialog - overlays an anchorpane to stop clicking background items and allows "darkening" too.
+    // dialog - overlays an anchorpane to stop clicking background items and allows
+    // "darkening" too.
     private final AnchorPane dialogAnchorPanel;
-    private javafx.scene.Node dialog;
+    private javafx.scene.Node dialogNode;
     private ChangeListener<Bounds> dialogBoundsListener;
 
     private final List<JmeUpdateLoop> updatingItems = new ArrayList<>();
 
     private int camWidth, camHeight;
 
+    private JmeUpdateLoop dialogJmeUpdateLoop;
+
     private JavaFxUI(Application application, String... cssStyles) {
 
         app = application;
 
-        Node guiNode = ((SimpleApplication)application).getGuiNode();
+        Node guiNode = ((SimpleApplication) application).getGuiNode();
         container = (JmeFxContainerImpl) JmeFxContainer.install(application, guiNode);
 
         group = new Group();
@@ -104,25 +106,28 @@ public class JavaFxUI {
         dialogAnchorPanel.setMinWidth(app.getCamera().getWidth());
         dialogAnchorPanel.setMinHeight(app.getCamera().getHeight());
 
-        // we get the screen bounds now - as soon as possible - because the bound check is done in an AppState.
-        // By the time the AppState is initialized the screen size could have changed and our checks would fail.
+        // we get the screen bounds now - as soon as possible - because the bound check
+        // is done in an AppState.
+        // By the time the AppState is initialized the screen size could have changed
+        // and our checks would fail.
         camWidth = application.getCamera().getWidth();
         camHeight = application.getCamera().getHeight();
 
         application.getStateManager().attach(new JavaFxUpdater());
 
-        //Handling now cross input
-        //Adding input handler
+        // Handling now cross input
+        // Adding input handler
         JmeMemoryInputHandler memoryInputHandler = new JmeMemoryInputHandler();
         app.getInputManager().addRawInputListener(memoryInputHandler);
-        //Set allowed to consume function
+        // Set allowed to consume function
         JmeFxEventConsumeAllowedFunction allowedFunction = new JmeFxEventConsumeAllowedFunction(memoryInputHandler);
         container.getInputListener().setAllowedToConsumeInputEventFunction(allowedFunction);
     }
 
     /**
-     * Initializes the JavaFxUI class ready for use.
-     * This initialization must be called first before this class is ready for use.
+     * Initializes the JavaFxUI class ready for use. This initialization must be
+     * called first before this class is ready for use.
+     *
      * @param application the Jmonkey Application.
      * @param cssStyles   The global css stylesheets.
      */
@@ -156,15 +161,16 @@ public class JavaFxUI {
 
         JfxPlatform.runInFxThread(() -> {
 
-            //uiscene.setMinWidth(app.getCamera().getWidth());
-            //uiscene.setMinHeight(app.getCamera().getHeight());
+            // uiscene.setMinWidth(app.getCamera().getWidth());
+            // uiscene.setMinHeight(app.getCamera().getHeight());
 
             // group.getChildren().clear();
 
             // group = new Group();
             // group.getChildren().add(uiscene);
 
-            // scene = new Scene(group, app.getCamera().getWidth(), app.getCamera().getHeight());
+            // scene = new Scene(group, app.getCamera().getWidth(),
+            // app.getCamera().getHeight());
             // scene.setFill(Color.TRANSPARENT);
 
             // container.setScene(scene, group);
@@ -174,25 +180,27 @@ public class JavaFxUI {
 
     /**
      * Attach a javafx.scene.Node to the GUI scene.
+     *
      * @param node the node to attach to the scene.
      */
     public void attachChild(javafx.scene.Node node) {
-        JfxPlatform.runInFxThread(() ->{
+        JfxPlatform.runInFxThread(() -> {
             uiscene.getChildren().add(node);
             recursivelyNotifyChildrenAdded(node);
         });
     }
 
     /**
-     * Attaches a popup onto the scene in a JME friendly way.
-     * Only one popup can be onscreen at once, adding annother will remove the old one.
-     * Clicking away from the popup will close it.
+     * Attaches a popup onto the scene in a JME friendly way. Only one popup can be
+     * onscreen at once, adding annother will remove the old one. Clicking away from
+     * the popup will close it.
+     *
      * @param node The content to be displayed
-     * @param x X coordinate of the top left of the popup
-     * @param y Y coordinate of the top left of the popup
+     * @param x    X coordinate of the top left of the popup
+     * @param y    Y coordinate of the top left of the popup
      * @return A Runnable that if called will remove the popup
      */
-    public Runnable attachPopup(javafx.scene.Node node, double x, double y){
+    public Runnable attachPopup(javafx.scene.Node node, double x, double y) {
         removeExistingPopup.run();
 
         AnchorPane popupOverlay = new AnchorPane();
@@ -207,7 +215,8 @@ public class JavaFxUI {
 
         removeExistingPopup = () -> {
             group.getChildren().remove(popupOverlay);
-            removeExistingPopup = () -> {};
+            removeExistingPopup = () -> {
+            };
         };
 
         popupOverlay.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -219,10 +228,11 @@ public class JavaFxUI {
 
     /**
      * Detach a node from the GUI scene.
+     *
      * @param node the node to detach from the scene.
      */
     public void detachChild(javafx.scene.Node node) {
-        JfxPlatform.runInFxThread(() ->{
+        JfxPlatform.runInFxThread(() -> {
             uiscene.getChildren().remove(node);
             recursivelyNotifyChildrenRemoved(node);
         });
@@ -230,6 +240,7 @@ public class JavaFxUI {
 
     /**
      * Detach a node from the GUI scene.
+     *
      * @param fxId the fx:id of the node.
      */
     public void detachChild(String fxId) {
@@ -246,6 +257,7 @@ public class JavaFxUI {
 
     /**
      * Get a control from the scene with the given fx:id
+     *
      * @param fxId the String fx:id if the node.
      * @return the node with the given name, or null if the node was not found.
      */
@@ -279,7 +291,7 @@ public class JavaFxUI {
 
             app.enqueue(() -> {
                 if (sceneNotifier) {
-                    ((SceneNotifier)node).onDetached();
+                    ((SceneNotifier) node).onDetached();
                 }
 
                 if (jmeUpdateLoop) {
@@ -305,11 +317,11 @@ public class JavaFxUI {
 
             app.enqueue(() -> {
                 if (sceneNotifier) {
-                    ((SceneNotifier)node).onAttached(app);
+                    ((SceneNotifier) node).onAttached(app);
                 }
 
                 if (jmeUpdateLoop) {
-                    updatingItems.add(((JmeUpdateLoop)node));
+                    updatingItems.add(((JmeUpdateLoop) node));
                 }
             });
         }
@@ -321,9 +333,10 @@ public class JavaFxUI {
     }
 
     /**
-     * Display a javafx.scene.Node as a centered dialog.
-     * A dimmed background will be drawn behind the node and any click events will be ignored
-     * on GUI items behind it.
+     * Display a javafx.scene.Node as a centered dialog. A dimmed background will be
+     * drawn behind the node and any click events will be ignored on GUI items
+     * behind it.
+     *
      * @param node the node to display as a dialog.
      */
     public void showDialog(javafx.scene.Node node) {
@@ -331,9 +344,13 @@ public class JavaFxUI {
     }
 
     /**
-     * Display a javafx.scene.Node as a centered dialog.
-     * A dimmed or transparent background will be drawn behind the node and any click events will be ignored
+     * Display a javafx.scene.Node as a centered dialog. A dimmed or transparent
+     * background will be drawn behind the node and any click events will be ignored
      * on GUI items behind it.
+     * <p>
+     * The node can implement {@link JmeUpdateLoop} to be included in the updating
+     * items.
+     *
      * @param node   the node to display as a dialog.
      * @param dimmed whether or not to dim the scene behind the given node.
      */
@@ -343,14 +360,18 @@ public class JavaFxUI {
         int scrWidth = app.getCamera().getWidth();
         int scrHeight = app.getCamera().getHeight();
 
-        dialog = node;
+        dialogNode = node;
         dialogBoundsListener = (prop, oldBounds, newBounds) -> {
-        	node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
-        	node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
-		};
+            node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
+            node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
+        };
 
-        if (dialog instanceof JmeUpdateLoop) {
-            updatingItems.add((JmeUpdateLoop) dialog);
+        if (dialogNode instanceof JmeUpdateLoop) {
+            dialogJmeUpdateLoop = (JmeUpdateLoop) dialogNode;
+            updatingItems.add(dialogJmeUpdateLoop);
+        } else {
+            dialogJmeUpdateLoop = wrapAsJmeUpdateLoop(dialogNode);
+            updatingItems.add(dialogJmeUpdateLoop);
         }
 
         JfxPlatform.runInFxThread(() -> {
@@ -370,6 +391,29 @@ public class JavaFxUI {
     }
 
     /**
+     * Wraps the node in a {@link JmeUpdateLoop} that does nothing to be added in
+     * the updating items.
+     * <p>
+     * Otherwise the {@link #removeDialog()} will throw a ClassCastException: class
+     * javafx.scene.layout.VBox (or whatever type the dialog was) cannot be cast to
+     * class com.jayfella.jme.jfx.impl.JmeUpdateLoop.
+     *
+     * @param node the {@link javafx.scene.Node} to be wrapped.
+     * @return the {@link JmeUpdateLoop}.
+     */
+    private JmeUpdateLoop wrapAsJmeUpdateLoop(javafx.scene.Node node) {
+        var proxyInstance = (JmeUpdateLoop) Proxy.newProxyInstance(this.getClass().getClassLoader(),
+                new Class[] { JmeUpdateLoop.class }, (proxy, method, methodArgs) -> {
+                    if (method.getName().equals("update")) {
+                        return null;
+                    } else {
+                        return method.invoke(node, methodArgs);
+                    }
+                });
+        return proxyInstance;
+    }
+
+    /**
      * Removes the shown dialog from the scene.
      */
     public void removeDialog() {
@@ -380,16 +424,17 @@ public class JavaFxUI {
 
         // check that dialog is implementing JmeUpdateLoop, otherwise it will be hard to
         // debug why the item was not removed from the list.
-        var updateLoop = (JmeUpdateLoop) dialog;
-        updatingItems.remove(updateLoop);
+        updatingItems.remove(dialogJmeUpdateLoop);
 
-        dialog.boundsInParentProperty().removeListener(dialogBoundsListener);
-        dialog = null;
+        dialogNode.boundsInParentProperty().removeListener(dialogBoundsListener);
+        dialogNode = null;
+        dialogJmeUpdateLoop = null;
         dialogBoundsListener = null;
     }
 
     /**
      * Execute a task on the JavaFX thread.
+     *
      * @param task the task to execute.
      */
     public void runInJavaFxThread(Runnable task) {
@@ -398,6 +443,7 @@ public class JavaFxUI {
 
     /**
      * Execute a task on the Jmonkey GL thread.
+     *
      * @param task the task to execute.
      */
     public void runInJmeThread(Runnable task) {
@@ -406,6 +452,7 @@ public class JavaFxUI {
 
     /**
      * Get the JmeFxContainer that is being used to manage Jfx with Jme.
+     *
      * @return the current implementation of JmeFxContainer in use.
      */
     public JmeFxContainer getJmeFxContainer() {
@@ -416,23 +463,31 @@ public class JavaFxUI {
 
         private Camera cam;
 
-
-        @Override protected void initialize(Application app) {
+        @Override
+        protected void initialize(Application app) {
             cam = app.getCamera();
 
         }
 
-        @Override protected void cleanup(Application app) { }
-        @Override protected void onEnable() { }
-        @Override protected void onDisable() { }
+        @Override
+        protected void cleanup(Application app) {
+        }
+
+        @Override
+        protected void onEnable() {
+        }
+
+        @Override
+        protected void onDisable() {
+        }
 
         @Override
         public void update(float tpf) {
-
             if (camWidth != cam.getWidth() || camHeight != cam.getHeight()) {
 
                 if (log.isDebugEnabled()) {
-                    log.debug("Bounds changing from [" + camWidth + "x" + camHeight + "] to [" + cam.getWidth() + "x" + cam.getHeight() + "]");
+                    log.debug("Bounds changing from [{}x{} to {}x{}]", camWidth, camHeight, cam.getWidth(),
+                            cam.getHeight());
                 }
 
                 camWidth = cam.getWidth();
