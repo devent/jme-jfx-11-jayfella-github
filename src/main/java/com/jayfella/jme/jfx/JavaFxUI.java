@@ -80,6 +80,8 @@ public class JavaFxUI {
 
     private JmeUpdateLoop dialogJmeUpdateLoop;
 
+    private boolean dialogBoundsListenerUpdating;
+
     private JavaFxUI(Application application, String... cssStyles) {
 
         app = application;
@@ -361,9 +363,13 @@ public class JavaFxUI {
         int scrHeight = app.getCamera().getHeight();
 
         dialogNode = node;
+        dialogBoundsListenerUpdating = false;
         dialogBoundsListener = (prop, oldBounds, newBounds) -> {
-            node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
-            node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
+            if (!dialogBoundsListenerUpdating) {
+                dialogBoundsListenerUpdating = true;
+                node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
+                node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
+            }
         };
 
         if (dialogNode instanceof JmeUpdateLoop) {
