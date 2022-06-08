@@ -369,6 +369,7 @@ public class JavaFxUI {
                 dialogBoundsListenerUpdating = true;
                 node.setLayoutX(scrWidth * 0.5 - newBounds.getWidth() * 0.5);
                 node.setLayoutY(scrHeight * 0.5 - newBounds.getHeight() * 0.5);
+                dialogBoundsListenerUpdating = false;
             }
         };
 
