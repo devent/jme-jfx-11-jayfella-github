@@ -39,7 +39,7 @@
 
     <groupId>com.anrisoftware.jmejfx</groupId>
     <artifactId>jme-jfx</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>jme-jfx :: JME3 JavaFX Bridge</name>
     <description>Updated to JavaFX 16 and jMonkeyEngine 3.5.2. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
