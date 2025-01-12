@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
+
 <?import javafx.scene.control.Button?>
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="20" fx:id="parent" fx:controller="com.jayfella.jme.jfx.TestController">
-    <children>
-        <Label fx:id="label1" text="Line 1"/>
-        <Label fx:id="label2" text="Line 2"/>
-        <Button fx:id="button1" text="Click me!" onAction="#buttonClicked"/>
-    </children>
-</VBox>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane id="parent" fx:id="parent" maxHeight="400.0" maxWidth="400.0" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jayfella.jme.jfx.TestController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="74.0" minWidth="0.0" percentWidth="20" prefWidth="0.3" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.0" minWidth="10.0" percentWidth="80" prefWidth="55.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.0" minWidth="10.0" percentWidth="20" prefWidth="55.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="318.0" minHeight="10.0" prefHeight="318.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="318.0" minHeight="10.0" prefHeight="318.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+            <VBox id="leftBox" fx:id="leftBox" prefHeight="400.0" prefWidth="0.0" spacing="20" BorderPane.alignment="CENTER">
+                <children>
+                    <Label fx:id="label1" text="Line 1" />
+                    <Label fx:id="label2" text="Line 2" />
+                    <Button fx:id="button1" onAction="#buttonClicked" text="Click me!" />
+                </children>
+            </VBox>
+      <VBox id="centerBox" fx:id="centerBox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Button mnemonicParsing="false" text="Button" />
+         </children>
+      </VBox>
+   </children>
+</GridPane>

@@ -26,14 +26,16 @@
  */
 package com.jayfella.jme.jfx.injme;
 
+import static com.jayfella.jme.jfx.injme.util.JmeWindowUtils.getX;
+import static com.jayfella.jme.jfx.injme.util.JmeWindowUtils.getY;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.jme3.system.JmeContext;
 import com.jme3.ui.Picture;
 import com.sun.javafx.embed.EmbeddedStageInterface;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static com.jayfella.jme.jfx.injme.util.JmeWindowUtils.*;
 
 /**
  * The implementation of the {@link Picture} to represent javaFX UI Scene.
@@ -75,8 +77,8 @@ public class JavaFxPicture extends Picture {
                 return;
             }
 
-            final int windowWidth = getWidth(jmeContext);
-            final int windowHeight = getHeight(jmeContext);
+            final int windowWidth = (int) getWidth();
+            final int windowHeight = (int) getHeight();
 
             if (windowWidth != container.getSceneWidth() || windowHeight != container.getSceneHeight()) {
                 container.fitSceneToWindowSize();

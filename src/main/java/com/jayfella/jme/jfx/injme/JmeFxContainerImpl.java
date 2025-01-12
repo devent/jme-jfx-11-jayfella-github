@@ -88,8 +88,8 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
      * @return the javaFX container.
      */
     public static JmeFxContainerImpl install(final Application application, final Node guiNode) {
-        return install(application, guiNode, new ProtonCursorProvider(application, application.getAssetManager(),
-                application.getInputManager()));
+        return install(application, guiNode,
+                new ProtonCursorProvider(application, application.getAssetManager(), application.getInputManager()));
     }
 
     /**
@@ -101,9 +101,10 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
      * @return the javaFX container.
      */
     public static JmeFxContainerImpl install(final Application application, final Node guiNode,
-                                                      final CursorDisplayProvider cursorProvider) {
+            final CursorDisplayProvider cursorProvider) {
 
-        final JmeFxContainerImpl container = new JmeFxContainerImpl(application.getAssetManager(), application, cursorProvider);
+        final JmeFxContainerImpl container = new JmeFxContainerImpl(application.getAssetManager(), application,
+                cursorProvider);
         guiNode.attachChild(container.getJmeNode());
 
         final InputManager inputManager = application.getInputManager();
@@ -309,13 +310,13 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     protected volatile boolean enabled;
 
     protected JmeFxContainerImpl(final AssetManager assetManager, final Application application,
-                                 final CursorDisplayProvider cursorProvider) {
+            final CursorDisplayProvider cursorProvider) {
         this.initFx();
         this.positionY = -1;
         this.positionX = -1;
         this.jmeContext = application.getContext();
         this.waitCount = new AtomicInteger();
-        this.imageLock = new FinalAtomicReadWriteLock(); //LockFactory.newAtomicARSWLock();
+        this.imageLock = new FinalAtomicReadWriteLock(); // LockFactory.newAtomicARSWLock();
         this.cursorProvider = cursorProvider;
         this.application = application;
         this.visibleCursor = true;
@@ -569,7 +570,9 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     public void grabFocus() {
 
         final EmbeddedStageInterface stageInterface = getStageInterface();
-        if (isFocused() || stageInterface == null) return;
+        if (isFocused() || stageInterface == null) {
+            return;
+        }
 
         stageInterface.setFocused(true, AbstractEvents.FOCUSEVENT_ACTIVATED);
         setFocused(true);
@@ -581,7 +584,9 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     public void fitSceneToWindowSize() {
 
         final long time = System.currentTimeMillis();
-        if (time - getLastResized() < MIN_RESIZE_INTERVAL) return;
+        if (time - getLastResized() < MIN_RESIZE_INTERVAL) {
+            return;
+        }
 
         final JmeContext jmeContext = getJmeContext();
 
@@ -598,8 +603,8 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
             final Picture picture = getPicture();
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Fit the scene to window size from [" + getSceneWidth() + "x" + getSceneHeight() + "] to " +
-                                "[" + textureWidth + "x" + textureHeight + "]");
+                LOGGER.debug("Fit the scene to window size from [" + getSceneWidth() + "x" + getSceneHeight() + "] to "
+                        + "[" + textureWidth + "x" + textureHeight + "]");
             }
 
             picture.setWidth(textureWidth);
@@ -673,26 +678,26 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     private void initFx() {
         Platform.startup(() -> {
             switch (Pixels.getNativeFormat()) {
-                case Pixels.Format.BYTE_ARGB:
-                    try {
-                        nativeFormat.complete(Format.ARGB8);
-                        reorderData = null;
-                    } catch (final Exception exc1) {
-                        nativeFormat.complete(Format.ABGR8);
-                        reorderData = JmeFxContainerImpl::reorder_ARGB82ABGR8;
-                    }
-                    break;
-                case Pixels.Format.BYTE_BGRA_PRE:
-                    try {
-                        nativeFormat.complete(Format.BGRA8);
-                        reorderData = null;
-                    } catch (final Exception exc2) {
-                        nativeFormat.complete(Format.ABGR8);
-                        reorderData = JmeFxContainerImpl::reorder_BGRA82ABGR8;
-                    }
-                    break;
-                default:
-                    throw new IllegalArgumentException("Not supported javaFX pixel format " + Pixels.getNativeFormat());
+            case Pixels.Format.BYTE_ARGB:
+                try {
+                    nativeFormat.complete(Format.ARGB8);
+                    reorderData = null;
+                } catch (final Exception exc1) {
+                    nativeFormat.complete(Format.ABGR8);
+                    reorderData = JmeFxContainerImpl::reorder_ARGB82ABGR8;
+                }
+                break;
+            case Pixels.Format.BYTE_BGRA_PRE:
+                try {
+                    nativeFormat.complete(Format.BGRA8);
+                    reorderData = null;
+                } catch (final Exception exc2) {
+                    nativeFormat.complete(Format.ABGR8);
+                    reorderData = JmeFxContainerImpl::reorder_BGRA82ABGR8;
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Not supported javaFX pixel format " + Pixels.getNativeFormat());
             }
         });
         Platform.setImplicitExit(false);
@@ -766,7 +771,9 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
     public void loseFocus() {
 
         final EmbeddedStageInterface stagePeer = getStageInterface();
-        if (!isFocused() || stagePeer == null) return;
+        if (!isFocused() || stagePeer == null) {
+            return;
+        }
 
         stagePeer.setFocused(false, AbstractEvents.FOCUSEVENT_DEACTIVATED);
 
@@ -786,7 +793,9 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
         }
 
         final EmbeddedSceneInterface sceneInterface = getSceneInterface();
-        if (sceneInterface == null) return;
+        if (sceneInterface == null) {
+            return;
+        }
 
         // final ByteBuffer tempData = notNull(getTempData());
         final ByteBuffer tempData = getTempData();
@@ -795,7 +804,8 @@ public class JmeFxContainerImpl implements JmeFxContainer, JmeFxContainerInterna
         final int sceneWidth = getSceneWidth();
         final int sceneHeight = getSceneHeight();
 
-        // if (!sceneInterface.getPixels(notNull(getTempIntData()), sceneWidth, sceneHeight)) {
+        // if (!sceneInterface.getPixels(notNull(getTempIntData()), sceneWidth,
+        // sceneHeight)) {
         if (!sceneInterface.getPixels(getTempIntData(), sceneWidth, sceneHeight)) {
             return;
         }

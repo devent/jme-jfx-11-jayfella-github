@@ -32,9 +32,14 @@ import com.jme3.app.DebugKeysAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.StatsAppState;
 import com.jme3.app.state.ConstantVerifierState;
+import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,7 +53,7 @@ public class JavaFxUIFXMLTest extends SimpleApplication {
         app.start();
     }
 
-    private VBox panel;
+    private Pane panel;
 
     private TestController controller;
 
@@ -58,7 +63,7 @@ public class JavaFxUIFXMLTest extends SimpleApplication {
 
     public void setupUi() throws IOException {
         var loader = new FXMLLoader();
-        this.panel = (VBox) loader.load(getClass().getResourceAsStream("/test.fxml"));
+        this.panel = (Pane) loader.load(getClass().getResourceAsStream("/test.fxml"));
         log.debug("Load test.fxml panel: {}", panel);
         this.controller = (TestController) loader.getController();
         log.debug("Load test.fxml controller: {}", controller);
@@ -66,6 +71,7 @@ public class JavaFxUIFXMLTest extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        addCube();
         JavaFxUI.initialize(this, getClass().getResource("/test.css").toString());
         JavaFxUI.getInstance().runInJavaFxThread(() -> {
             try {
@@ -75,6 +81,18 @@ public class JavaFxUIFXMLTest extends SimpleApplication {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void addCube() {
+        /** A simple textured cube -- in good MIP map quality. */
+        Box cube1Mesh = new Box(1f, 1f, 1f);
+        Geometry cube1Geo = new Geometry("My Textured Box", cube1Mesh);
+        cube1Geo.setLocalTranslation(new Vector3f(-4f, 1.1f, 0f));
+        Material cube1Mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        Texture cube1Tex = assetManager.loadTexture("Interface/Logo/Monkey.jpg");
+        cube1Mat.setTexture("ColorMap", cube1Tex);
+        cube1Geo.setMaterial(cube1Mat);
+        rootNode.attachChild(cube1Geo);
     }
 
 }

@@ -34,15 +34,15 @@
     <parent>
         <groupId>com.anrisoftware.globalpom</groupId>
         <artifactId>globalpom-groovy-gmavenplus</artifactId>
-        <version>4.6.2</version>
+        <version>4.8.0</version>
     </parent>
 
     <groupId>com.anrisoftware.jmejfx</groupId>
     <artifactId>jme-jfx</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
+    <version>1.21.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>jme-jfx :: JME3 JavaFX Bridge</name>
-    <description>Updated to JavaFX 19 and jMonkeyEngine 3.5.2. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
+    <description>Updated to JavaFX 21 and jMonkeyEngine 3.7.0-stable. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
     <inceptionYear>2019</inceptionYear>
 
     <properties>
@@ -64,15 +64,9 @@
         <license.custom.license.owner>jMonkeyEngine</license.custom.license.owner>
         <license.custom.license.template>com/mycila/maven/plugin/license/templates/BSD-3.txt</license.custom.license.template>
         <license.custom.license.email>erwin@muellerpublic.de</license.custom.license.email>
-        <globalpom.custom.current.year>2022</globalpom.custom.current.year>
         <!-- versions -->
-        <jmejfx.custom.jme3.version>3.5.2-stable</jmejfx.custom.jme3.version>
-        <jmejfx.custom.javafx.version>19</jmejfx.custom.javafx.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <file.encoding>${project.build.sourceEncoding}</file.encoding>
-        <globalpom.custom.source.source>11</globalpom.custom.source.source>
-        <globalpom.custom.source.target>11</globalpom.custom.source.target>
-        <globalpom.custom.requireMavenVersion>3.6.0</globalpom.custom.requireMavenVersion>
+        <jmejfx.custom.jme3.version>3.7.0-stable</jmejfx.custom.jme3.version>
+        <jmejfx.custom.javafx.version>21</jmejfx.custom.javafx.version>
     </properties>
 
     <licenses>
@@ -122,6 +116,12 @@
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-testdata</artifactId>
+            <version>${jmejfx.custom.jme3.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

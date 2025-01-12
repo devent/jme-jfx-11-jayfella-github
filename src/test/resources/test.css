@@ -1,3 +1,11 @@
 #parent {
-    -fx-background-color: azure;
+    -fx-background-color: transparent;
+}
+
+#leftBox {
+	-fx-background-color: azure;
+}
+
+#centerBox {
+	-fx-background-color: transparent;
 }
