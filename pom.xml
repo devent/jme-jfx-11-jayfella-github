@@ -40,7 +40,7 @@
 
 	<groupId>com.anrisoftware.jmejfx</groupId>
 	<artifactId>jme-jfx</artifactId>
-	<version>1.21.1-SNAPSHOT</version>
+	<version>1.21.1</version>
 	<packaging>jar</packaging>
 	<name>jme-jfx :: JME3 JavaFX Bridge</name>
 	<description>Updated to JavaFX 21 and jMonkeyEngine 3.7.0-stable. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
