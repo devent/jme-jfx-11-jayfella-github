@@ -32,6 +32,7 @@ import static com.jayfella.jme.jfx.injme.util.JmeWindowUtils.getY;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jayfella.jme.jfx.injme.util.JmeWindowUtils;
 import com.jayfella.jme.jfx.util.JfxPlatform;
 import com.jme3.system.JmeContext;
 import com.jme3.ui.Picture;
@@ -77,8 +78,8 @@ public class JavaFxPicture extends Picture {
                 return;
             }
 
-            final int windowWidth = (int) getWidth();
-            final int windowHeight = (int) getHeight();
+            final int windowWidth = JmeWindowUtils.getWidth(jmeContext);
+            final int windowHeight = JmeWindowUtils.getHeight(jmeContext);
 
             if (windowWidth != container.getSceneWidth() || windowHeight != container.getSceneHeight()) {
                 container.fitSceneToWindowSize();

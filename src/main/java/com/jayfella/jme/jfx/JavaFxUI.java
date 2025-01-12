@@ -163,19 +163,18 @@ public class JavaFxUI {
 
         JfxPlatform.runInFxThread(() -> {
 
-            // uiscene.setMinWidth(app.getCamera().getWidth());
-            // uiscene.setMinHeight(app.getCamera().getHeight());
-
-            // group.getChildren().clear();
-
-            // group = new Group();
-            // group.getChildren().add(uiscene);
-
-            // scene = new Scene(group, app.getCamera().getWidth(),
-            // app.getCamera().getHeight());
-            // scene.setFill(Color.TRANSPARENT);
-
-            // container.setScene(scene, group);
+//            uiscene.setMinWidth(app.getCamera().getWidth());
+//            uiscene.setMinHeight(app.getCamera().getHeight());
+//
+//            group.getChildren().clear();
+//
+//            group = new Group();
+//            group.getChildren().add(uiscene);
+//
+//            scene = new Scene(group, app.getCamera().getWidth(), app.getCamera().getHeight());
+//            scene.setFill(Color.TRANSPARENT);
+//
+//            container.setScene(scene, group);
         });
 
     }
@@ -303,8 +302,7 @@ public class JavaFxUI {
             });
         }
 
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
+        if (node instanceof Parent parent) {
             parent.getChildrenUnmodifiable().forEach(this::recursivelyNotifyChildrenRemoved);
         }
     }
@@ -328,8 +326,7 @@ public class JavaFxUI {
             });
         }
 
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
+        if (node instanceof Parent parent) {
             parent.getChildrenUnmodifiable().forEach(this::recursivelyNotifyChildrenAdded);
         }
     }
