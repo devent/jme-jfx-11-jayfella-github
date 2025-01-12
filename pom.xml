@@ -172,6 +172,42 @@
         </dependency>
     </dependencies>
 
+	<build>
+	<plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <properties>
+                        <owner>jMonkeyEngine</owner>
+                        <year>2019-2025</year>
+                    </properties>
+                    <mapping>
+                        <Jenkinsfile>JAVADOC_STYLE</Jenkinsfile>
+                        <Makefile>SCRIPT_STYLE</Makefile>
+                    </mapping>
+                    <licenseSets>
+                        <licenseSet>
+                            <header>BSD-3.txt</header>
+                            <excludes>
+                                <exclude>**/license.txt</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+</plugins>
+	</build>
+
     <profiles>
         <profile>
             <id>private-repository</id>
