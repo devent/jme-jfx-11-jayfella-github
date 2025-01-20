@@ -40,10 +40,10 @@
 
 	<groupId>com.anrisoftware.jmejfx</groupId>
 	<artifactId>jme-jfx</artifactId>
-	<version>1.21.1</version>
+	<version>1.23.0</version>
 	<packaging>jar</packaging>
 	<name>jme-jfx :: JME3 JavaFX Bridge</name>
-	<description>Updated to JavaFX 21 and jMonkeyEngine 3.7.0-stable. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
+	<description>Updated to JavaFX 23 and jMonkeyEngine 3.7.0-stable. Forked from the from jme-jfx-11-jayfella-github, now at https://github.com/jMonkeyEngine-archive/jme-jfx-11-jayfella-github</description>
 	<inceptionYear>2019</inceptionYear>
 
 	<properties>
@@ -67,7 +67,7 @@
 		<license.custom.license.email>erwin@muellerpublic.de</license.custom.license.email>
 		<!-- versions -->
 		<jmejfx.custom.jme3.version>3.7.0-stable</jmejfx.custom.jme3.version>
-		<jmejfx.custom.javafx.version>21</jmejfx.custom.javafx.version>
+		<jmejfx.custom.javafx.version>23.0.1</jmejfx.custom.javafx.version>
 	</properties>
 
 	<licenses>
